@@ -1,0 +1,104 @@
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific folders
+.vscode/
+.vscode-test/
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
+.vscode-test/
+
+# Backup files
+*.bak
+
+# SQL Server files
+*.mdf
+*.ldf
+*.ndf
+
+# Microsoft Visual Studio Solution User Options File
+*.suo
+
+# Windows shortcut files
+*.lnk
+
+# Others
+*.ipch
+*.tmp
+*.log
+*.obj
+*.pyc
+*.class
+*.DS_Store
+
+# Visual Studio 2019/2022
+.vs/
+.vscode/
+
+# Rider
+.idea/
+*.sln.iml
+
+# Auto generated files from Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# NPM
+package-lock.json
+yarn.lock
+
+# Ignore .NET Core build results
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Ignore build outputs
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Ignore nuget packages
+*.nupkg
+*.snupkg
+*.nuspec
+.packages/
+
+# Ignore jetbrains Rider/CLion and their project files
+.idea/
+.idea_modules/
+releases/
+out/
