@@ -1,0 +1,54 @@
+﻿<Window x:Class="TriviaMaster.Main.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="משחק טריוויה" Height="600" Width="400"
+        Background="#1E1E2F" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Reference to styles from Resources folder -->
+                <ResourceDictionary Source="Resources/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <!-- Define rows for layout -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Progress indicator for the quiz -->
+        <TextBlock Text="2/5" Foreground="LightGray" FontSize="16" 
+                   HorizontalAlignment="Left" VerticalAlignment="Top" 
+                   Margin="10,10,0,0"/>
+
+        <!-- Question text wrapped in a rounded border -->
+        <Border Background="#2A2A3D" CornerRadius="15" Padding="15"
+                Margin="0,60,0,20" HorizontalAlignment="Stretch">
+            <TextBlock Text="איזה ענפי עץ מופיעים בסמל המדינה?" 
+                       FontSize="24" Foreground="White" 
+                       TextWrapping="Wrap" TextAlignment="Center"/>
+        </Border>
+
+        <!-- Answer buttons styled with a custom style -->
+        <StackPanel Grid.Row="1" VerticalAlignment="Top">
+            <Button Content="ערבה" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
+            <Button Content="אקליפטוס" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
+            <Button Content="זית" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
+            <Button Content="דקל" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
+        </StackPanel>
+
+        <!-- Button to end the game -->
+        <Button Content="סיים משחק" 
+                Grid.Row="2"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Margin="0,10,0,0" Padding="10,5"
+                Foreground="White" Background="#625FCB" 
+                FontSize="16" BorderThickness="0" Height="40" Width="120"
+                Style="{StaticResource RoundedButtonStyle}"/>
+    </Grid>
+</Window>
