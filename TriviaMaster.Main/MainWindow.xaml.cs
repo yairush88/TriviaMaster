@@ -41,6 +41,7 @@ namespace TriviaMaster.Main
             else
             {
                 _timer.Stop();
+                EnableAnswerButtons(false);
                 HighlightCorrectAnswerWithTimeout();
                 NextQuestionWithDelay();
             }
@@ -105,9 +106,10 @@ namespace TriviaMaster.Main
         private async void AnswerButton_Click(object sender, RoutedEventArgs e)
         {
             _timer.Stop();
+            EnableAnswerButtons(false);
+
             var button = sender as Button;
             int selectedAnswerIndex = int.Parse(button.Tag.ToString());
-            EnableAnswerButtons(false);
 
             if (_currentQuestions[_currentQuestionIndex].IsCorrect(selectedAnswerIndex))
             {
@@ -130,6 +132,7 @@ namespace TriviaMaster.Main
             int correctIndex = _currentQuestions[_currentQuestionIndex].CorrectAnswerIndex;
             Button correctButton = GetButtonByIndex(correctIndex);
             correctButton.Background = new SolidColorBrush(Colors.Green);
+            EnableAnswerButtons(false);
         }
 
         private void HighlightCorrectAnswerWithTimeout()
