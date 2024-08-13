@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="משחק טריוויה" Height="600" Width="600"
-        Background="#1E1E2F" WindowStartupLocation="CenterScreen">
+        Background="#1E1E2F" WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -15,24 +16,33 @@
 
     <Grid Margin="20">
         <!-- Topic selection buttons -->
-        <StackPanel x:Name="topicSelectionPanel" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,20">
+        <StackPanel x:Name="TopicSelectionPanel" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,20">
             <Button Content="חגים ומועדים יהודיים" Style="{StaticResource TopicButtonStyle}" Click="TopicButton_Click"/>
             <Button Content="ישראל וציונות" Style="{StaticResource TopicButtonStyle}" Click="TopicButton_Click"/>
             <Button Content="ירושלים" Style="{StaticResource TopicButtonStyle}" Click="TopicButton_Click"/>
         </StackPanel>
 
         <!-- Question and answers section, initially hidden -->
-        <StackPanel x:Name="questionPanel" Visibility="Collapsed" VerticalAlignment="Top">
+        <StackPanel x:Name="QuestionPanel" Visibility="Collapsed" VerticalAlignment="Top">
             <!-- Question text -->
             <Border Background="#2A2A3D" CornerRadius="15" Padding="15" Margin="0,60,0,20" HorizontalAlignment="Stretch">
-                <TextBlock x:Name="lblQuestion" FontSize="24" Foreground="White" TextWrapping="Wrap" FlowDirection="RightToLeft" TextAlignment="Center"/>
+                <TextBlock x:Name="LblQuestion" FontSize="24" Foreground="White" TextWrapping="Wrap" TextAlignment="Center"/>
             </Border>
 
             <!-- Answer buttons -->
-            <Button x:Name="btnAnswer1" Tag="0" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
-            <Button x:Name="btnAnswer2" Tag="1" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
-            <Button x:Name="btnAnswer3" Tag="2" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
-            <Button x:Name="btnAnswer4" Tag="3" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
+            <Button x:Name="BtnAnswer1" Tag="0" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
+            <Button x:Name="BtnAnswer2" Tag="1" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
+            <Button x:Name="BtnAnswer3" Tag="2" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
+            <Button x:Name="BtnAnswer4" Tag="3" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
+        </StackPanel>
+
+        <!-- Results section, initially hidden -->
+        <StackPanel x:Name="ResultPanel" Visibility="Collapsed" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,20,0,0">
+            <TextBlock x:Name="LblResult" FontSize="24" Foreground="White" TextAlignment="Center" Margin="0,0,0,20"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="בית" Style="{StaticResource TopicButtonStyle}" Click="HomeButton_Click" Margin="10,0"/>
+                <Button Content="שחק שוב" Style="{StaticResource TopicButtonStyle}" Click="PlayAgainButton_Click" Margin="10,0"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

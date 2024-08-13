@@ -9,9 +9,10 @@ namespace TriviaMaster.Main
 {
     public partial class MainWindow : Window
     {
-        private List<Question> currentQuestions;
-        private int currentQuestionIndex = 0;
-        private int correctAnswers = 0;
+        private List<Question> _currentQuestions;
+        private int _currentQuestionIndex;
+        private int _correctAnswers;
+        private string _selectedTopic;
 
         public MainWindow()
         {
@@ -20,46 +21,45 @@ namespace TriviaMaster.Main
 
         private void LoadQuestions(string topic)
         {
-            // Get 10 random questions based on the selected topic
-            currentQuestions = QuestionRepository.GetRandomQuestions(topic);
-            currentQuestionIndex = 0;
-            correctAnswers = 0;
+            _selectedTopic = topic;
+            _currentQuestions = QuestionRepository.GetRandomQuestions(topic);
+            _currentQuestionIndex = 0;
+            _correctAnswers = 0;
 
-            // Hide the topic selection panel and show the question panel
-            topicSelectionPanel.Visibility = Visibility.Collapsed;
-            questionPanel.Visibility = Visibility.Visible;
+            TopicSelectionPanel.Visibility = Visibility.Collapsed;
+            QuestionPanel.Visibility = Visibility.Visible;
+            ResultPanel.Visibility = Visibility.Collapsed;
 
             DisplayQuestion();
         }
 
         private void DisplayQuestion()
         {
-            if (currentQuestionIndex < currentQuestions.Count)
+            if (_currentQuestionIndex < _currentQuestions.Count)
             {
-                var question = currentQuestions[currentQuestionIndex];
-                lblQuestion.Text = question.Text;
+                var question = _currentQuestions[_currentQuestionIndex];
+                LblQuestion.Text = question.Text;
 
-                btnAnswer1.Content = question.Answers[0];
-                btnAnswer2.Content = question.Answers[1];
-                btnAnswer3.Content = question.Answers[2];
-                btnAnswer4.Content = question.Answers[3];
+                BtnAnswer1.Content = question.Answers[0];
+                BtnAnswer2.Content = question.Answers[1];
+                BtnAnswer3.Content = question.Answers[2];
+                BtnAnswer4.Content = question.Answers[3];
 
                 ResetButtonColors();
                 EnableAnswerButtons(true);
             }
             else
             {
-                MessageBox.Show($"סיום משחק! ענית נכון על {correctAnswers} מתוך {currentQuestions.Count} שאלות.");
-                // Optionally reset or show a restart button
+                ShowResults();
             }
         }
 
         private void ResetButtonColors()
         {
-            btnAnswer1.ClearValue(BackgroundProperty);
-            btnAnswer2.ClearValue(BackgroundProperty);
-            btnAnswer3.ClearValue(BackgroundProperty);
-            btnAnswer4.ClearValue(BackgroundProperty);
+            BtnAnswer1.ClearValue(BackgroundProperty);
+            BtnAnswer2.ClearValue(BackgroundProperty);
+            BtnAnswer3.ClearValue(BackgroundProperty);
+            BtnAnswer4.ClearValue(BackgroundProperty);
         }
 
         private async void AnswerButton_Click(object sender, RoutedEventArgs e)
@@ -68,10 +68,10 @@ namespace TriviaMaster.Main
             int selectedAnswerIndex = int.Parse(button.Tag.ToString());
             EnableAnswerButtons(false);
 
-            if (currentQuestions[currentQuestionIndex].IsCorrect(selectedAnswerIndex))
+            if (_currentQuestions[_currentQuestionIndex].IsCorrect(selectedAnswerIndex))
             {
                 button.Background = new SolidColorBrush(Colors.Green);
-                correctAnswers++;
+                _correctAnswers++;
             }
             else
             {
@@ -79,47 +79,64 @@ namespace TriviaMaster.Main
                 HighlightCorrectAnswer();
             }
 
-            // Wait for 2 seconds before moving to the next question
             await Task.Delay(2000);
 
-            currentQuestionIndex++;
+            _currentQuestionIndex++;
             DisplayQuestion();
         }
 
         private void HighlightCorrectAnswer()
         {
-            int correctIndex = currentQuestions[currentQuestionIndex].CorrectAnswerIndex;
+            int correctIndex = _currentQuestions[_currentQuestionIndex].CorrectAnswerIndex;
 
             switch (correctIndex)
             {
                 case 0:
-                    btnAnswer1.Background = new SolidColorBrush(Colors.Green);
+                    BtnAnswer1.Background = new SolidColorBrush(Colors.Green);
                     break;
                 case 1:
-                    btnAnswer2.Background = new SolidColorBrush(Colors.Green);
+                    BtnAnswer2.Background = new SolidColorBrush(Colors.Green);
                     break;
                 case 2:
-                    btnAnswer3.Background = new SolidColorBrush(Colors.Green);
+                    BtnAnswer3.Background = new SolidColorBrush(Colors.Green);
                     break;
                 case 3:
-                    btnAnswer4.Background = new SolidColorBrush(Colors.Green);
+                    BtnAnswer4.Background = new SolidColorBrush(Colors.Green);
                     break;
             }
         }
 
         private void EnableAnswerButtons(bool isEnabled)
         {
-            btnAnswer1.IsEnabled = isEnabled;
-            btnAnswer2.IsEnabled = isEnabled;
-            btnAnswer3.IsEnabled = isEnabled;
-            btnAnswer4.IsEnabled = isEnabled;
+            BtnAnswer1.IsEnabled = isEnabled;
+            BtnAnswer2.IsEnabled = isEnabled;
+            BtnAnswer3.IsEnabled = isEnabled;
+            BtnAnswer4.IsEnabled = isEnabled;
+        }
+
+        private void ShowResults()
+        {
+            QuestionPanel.Visibility = Visibility.Collapsed;
+            ResultPanel.Visibility = Visibility.Visible;
+
+            LblResult.Text = $"סיום משחק! ענית נכון על {_correctAnswers} מתוך {_currentQuestions.Count} שאלות.";
+        }
+
+        private void HomeButton_Click(object sender, RoutedEventArgs e)
+        {
+            ResultPanel.Visibility = Visibility.Collapsed;
+            TopicSelectionPanel.Visibility = Visibility.Visible;
+        }
+
+        private void PlayAgainButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadQuestions(_selectedTopic);
         }
 
         private void TopicButton_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            string selectedTopic = button.Content.ToString();
-            LoadQuestions(selectedTopic);
+            LoadQuestions(button.Content.ToString());
         }
     }
 }
