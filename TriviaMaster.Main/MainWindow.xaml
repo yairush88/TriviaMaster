@@ -25,7 +25,7 @@
         <StackPanel x:Name="questionPanel" Visibility="Collapsed" VerticalAlignment="Top">
             <!-- Question text -->
             <Border Background="#2A2A3D" CornerRadius="15" Padding="15" Margin="0,60,0,20" HorizontalAlignment="Stretch">
-                <TextBlock x:Name="lblQuestion" FontSize="24" Foreground="White" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock x:Name="lblQuestion" FontSize="24" Foreground="White" TextWrapping="Wrap" FlowDirection="RightToLeft" TextAlignment="Center"/>
             </Border>
 
             <!-- Answer buttons -->
