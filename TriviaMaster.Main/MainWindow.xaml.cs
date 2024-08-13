@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Microsoft.Extensions.Configuration;
 using TriviaMaster.Common;
 
 namespace TriviaMaster.Main
@@ -14,8 +16,9 @@ namespace TriviaMaster.Main
         private int _currentQuestionIndex;
         private int _correctAnswers;
         private string _selectedTopic;
-        private readonly DispatcherTimer _timer;
+        private DispatcherTimer _timer;
         private int _timeLeft;
+        private int _numberOfQuestions;
 
         public MainWindow()
         {
@@ -23,6 +26,18 @@ namespace TriviaMaster.Main
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += Timer_Tick;
+
+            LoadConfiguration();
+        }
+
+        private void LoadConfiguration()
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            _numberOfQuestions = int.Parse(configuration["GameSettings:NumberOfQuestions"]);
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -47,6 +62,12 @@ namespace TriviaMaster.Main
             _currentQuestionIndex = 0;
             _correctAnswers = 0;
 
+            // Adjust the number of questions based on configuration
+            if (_currentQuestions.Count > _numberOfQuestions)
+            {
+                _currentQuestions = _currentQuestions.GetRange(0, _numberOfQuestions);
+            }
+
             TopicSelectionPanel.Visibility = Visibility.Collapsed;
             QuestionPanel.Visibility = Visibility.Visible;
             ResultPanel.Visibility = Visibility.Collapsed;
@@ -58,9 +79,8 @@ namespace TriviaMaster.Main
         {
             if (_currentQuestionIndex < _currentQuestions.Count)
             {
-                // Show the timer and question number at the beginning of each question
-                LblTimer.Visibility = Visibility.Visible;
                 LblQuestionNumber.Visibility = Visibility.Visible;
+                LblTimer.Visibility = Visibility.Visible;
 
                 var question = _currentQuestions[_currentQuestionIndex];
                 LblQuestionNumber.Text = $"שאלה {_currentQuestionIndex + 1} מתוך {_currentQuestions.Count}";
@@ -83,7 +103,6 @@ namespace TriviaMaster.Main
                 ShowResults();
             }
         }
-
 
         private void ResetButtonColors()
         {
@@ -159,15 +178,12 @@ namespace TriviaMaster.Main
 
         private void ShowResults()
         {
-            // Hide the question panel and show the results panel
             QuestionPanel.Visibility = Visibility.Collapsed;
             ResultPanel.Visibility = Visibility.Visible;
 
-            // Hide the timer and question number
             LblTimer.Visibility = Visibility.Collapsed;
             LblQuestionNumber.Visibility = Visibility.Collapsed;
 
-            // Display the results
             LblResult.Text = $"סיום משחק! ענית נכון על {_correctAnswers} מתוך {_currentQuestions.Count} שאלות.";
         }
 
