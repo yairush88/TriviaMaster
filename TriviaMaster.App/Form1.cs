@@ -1,3 +1,5 @@
+using TriviaMaster.Common;
+
 namespace TriviaMaster.App;
 public partial class Form1 : Form
 {
