@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using TriviaMaster.Common;
 
 namespace TriviaMaster.Main
@@ -41,6 +43,9 @@ namespace TriviaMaster.Main
                 btnAnswer2.Content = question.Answers[1];
                 btnAnswer3.Content = question.Answers[2];
                 btnAnswer4.Content = question.Answers[3];
+
+                ResetButtonColors();
+                EnableAnswerButtons(true);
             }
             else
             {
@@ -49,18 +54,65 @@ namespace TriviaMaster.Main
             }
         }
 
-        private void AnswerButton_Click(object sender, RoutedEventArgs e)
+        private void ResetButtonColors()
+        {
+            btnAnswer1.ClearValue(BackgroundProperty);
+            btnAnswer2.ClearValue(BackgroundProperty);
+            btnAnswer3.ClearValue(BackgroundProperty);
+            btnAnswer4.ClearValue(BackgroundProperty);
+        }
+
+        private async void AnswerButton_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
             int selectedAnswerIndex = int.Parse(button.Tag.ToString());
+            EnableAnswerButtons(false);
 
             if (currentQuestions[currentQuestionIndex].IsCorrect(selectedAnswerIndex))
             {
+                button.Background = new SolidColorBrush(Colors.Green);
                 correctAnswers++;
             }
+            else
+            {
+                button.Background = new SolidColorBrush(Colors.Red);
+                HighlightCorrectAnswer();
+            }
+
+            // Wait for 2 seconds before moving to the next question
+            await Task.Delay(2000);
 
             currentQuestionIndex++;
             DisplayQuestion();
+        }
+
+        private void HighlightCorrectAnswer()
+        {
+            int correctIndex = currentQuestions[currentQuestionIndex].CorrectAnswerIndex;
+
+            switch (correctIndex)
+            {
+                case 0:
+                    btnAnswer1.Background = new SolidColorBrush(Colors.Green);
+                    break;
+                case 1:
+                    btnAnswer2.Background = new SolidColorBrush(Colors.Green);
+                    break;
+                case 2:
+                    btnAnswer3.Background = new SolidColorBrush(Colors.Green);
+                    break;
+                case 3:
+                    btnAnswer4.Background = new SolidColorBrush(Colors.Green);
+                    break;
+            }
+        }
+
+        private void EnableAnswerButtons(bool isEnabled)
+        {
+            btnAnswer1.IsEnabled = isEnabled;
+            btnAnswer2.IsEnabled = isEnabled;
+            btnAnswer3.IsEnabled = isEnabled;
+            btnAnswer4.IsEnabled = isEnabled;
         }
 
         private void TopicButton_Click(object sender, RoutedEventArgs e)
