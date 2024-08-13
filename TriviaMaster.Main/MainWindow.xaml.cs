@@ -1,43 +1,34 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Microsoft.Extensions.Configuration;
 using TriviaMaster.Common;
 
 namespace TriviaMaster.Main
 {
     public partial class MainWindow : Window
     {
+        private readonly GameSettings _gameSettings;
+        private readonly IHost _host;
         private List<Question> _currentQuestions;
         private int _currentQuestionIndex;
         private int _correctAnswers;
         private string _selectedTopic;
         private DispatcherTimer _timer;
         private int _timeLeft;
-        private int _numberOfQuestions;
 
-        public MainWindow()
+        public MainWindow(IOptions<GameSettings> gameSettings)
         {
             InitializeComponent();
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(1);
+            _gameSettings = gameSettings.Value;
+
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
             _timer.Tick += Timer_Tick;
-
-            LoadConfiguration();
-        }
-
-        private void LoadConfiguration()
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-
-            _numberOfQuestions = int.Parse(configuration["GameSettings:NumberOfQuestions"]);
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -62,10 +53,9 @@ namespace TriviaMaster.Main
             _currentQuestionIndex = 0;
             _correctAnswers = 0;
 
-            // Adjust the number of questions based on configuration
-            if (_currentQuestions.Count > _numberOfQuestions)
+            if (_currentQuestions.Count > _gameSettings.NumberOfQuestions)
             {
-                _currentQuestions = _currentQuestions.GetRange(0, _numberOfQuestions);
+                _currentQuestions = _currentQuestions.GetRange(0, _gameSettings.NumberOfQuestions);
             }
 
             TopicSelectionPanel.Visibility = Visibility.Collapsed;
@@ -84,7 +74,7 @@ namespace TriviaMaster.Main
 
                 var question = _currentQuestions[_currentQuestionIndex];
                 LblQuestionNumber.Text = $"שאלה {_currentQuestionIndex + 1} מתוך {_currentQuestions.Count}";
-                LblTimer.Text = $"זמן שנותר: 15 שניות";
+                LblTimer.Text = $"זמן שנותר: {_gameSettings.TimePerQuestion} שניות";
                 LblQuestion.Text = question.Text;
 
                 BtnAnswer1.Content = question.Answers[0];
@@ -95,7 +85,7 @@ namespace TriviaMaster.Main
                 ResetButtonColors();
                 EnableAnswerButtons(true);
 
-                _timeLeft = 15;
+                _timeLeft = _gameSettings.TimePerQuestion;
                 _timer.Start();
             }
             else
