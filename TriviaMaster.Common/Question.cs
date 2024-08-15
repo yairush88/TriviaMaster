@@ -1,14 +1,22 @@
 ﻿namespace TriviaMaster.Common
 {
-    public class Question(string Text, List<string> Answers, int CorrectAnswerIndex)
+    public class Question
     {
-        public string Text { get; } = Text;
-        public List<string> Answers { get; } = Answers;
-        public int CorrectAnswerIndex { get; } = CorrectAnswerIndex;
+        public string Text { get; }
+        public List<string> Answers { get; }
+        public int CorrectAnswerIndex { get; }
+
+        public Question(string text, List<string> answers, int correctAnswerIndex)
+        {
+            Text = text;
+            Answers = answers;
+            CorrectAnswerIndex = correctAnswerIndex;
+        }
 
         public bool IsCorrect(int selectedAnswerIndex)
         {
             return selectedAnswerIndex == CorrectAnswerIndex;
         }
     }
+
 }
