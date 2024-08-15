@@ -35,9 +35,9 @@
             </Border>
 
             <!-- Answer buttons -->
-            <Button x:Name="BtnAnswer1" Tag="0" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
-            <Button x:Name="BtnAnswer2" Tag="1" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
-            <Button x:Name="BtnAnswer3" Tag="2" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
+            <Button x:Name="BtnAnswer1" Tag="0" Click="AnswerButton_Click" Style="{StaticResource NeonButtonStyle}" Margin="0,10"/>
+            <Button x:Name="BtnAnswer2" Tag="1" Click="AnswerButton_Click" Style="{StaticResource NeonButtonStyle}" Margin="0,10"/>
+            <Button x:Name="BtnAnswer3" Tag="2" Click="AnswerButton_Click" Style="{StaticResource NeonButtonStyle}" Margin="0,10"/>
             <Button x:Name="BtnAnswer4" Tag="3" Click="AnswerButton_Click" Style="{StaticResource AnswerButtonStyle}" Margin="0,10"/>
         </StackPanel>
 

@@ -40,6 +40,33 @@
         <Setter Property="Background" Value="#292A4B"/>
     </Style>
 
+    <Style x:Key="NeonButtonStyle" TargetType="Button" BasedOn="{StaticResource AnswerButtonStyle}">
+        <!-- הוספת אפקט הניאון -->
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Cyan" BlurRadius="15" ShadowDepth="0" Opacity="0.7"/>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Lime"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="Lime" BlurRadius="20" ShadowDepth="0" Opacity="0.9"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="BorderBrush" Value="Magenta"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="Magenta" BlurRadius="20" ShadowDepth="0" Opacity="1.0"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- Style specifically for topic buttons -->
     <Style x:Key="TopicButtonStyle" BasedOn="{StaticResource RoundedButtonStyle}" TargetType="Button">
         <Setter Property="FontSize" Value="22"/>
