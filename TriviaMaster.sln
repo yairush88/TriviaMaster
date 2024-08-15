@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriviaMaster.Main", "TriviaMaster.Main\TriviaMaster.Main.csproj", "{49E562B2-037F-4B63-83C2-27B19B6BB843}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TriviaMaster.Main", "TriviaMaster.Main\TriviaMaster.Main.csproj", "{49E562B2-037F-4B63-83C2-27B19B6BB843}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriviaMaster.Common", "TriviaMaster.Common\TriviaMaster.Common.csproj", "{C63F9ACC-3BB2-4051-AE96-1B15E41D33DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TriviaMaster.Common", "TriviaMaster.Common\TriviaMaster.Common.csproj", "{C63F9ACC-3BB2-4051-AE96-1B15E41D33DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriviaMaster.ViewModels", "TriviaMaster.ViewModels\TriviaMaster.ViewModels.csproj", "{7E3BE260-1505-4228-BC64-CE1B00C234E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C63F9ACC-3BB2-4051-AE96-1B15E41D33DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C63F9ACC-3BB2-4051-AE96-1B15E41D33DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C63F9ACC-3BB2-4051-AE96-1B15E41D33DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E3BE260-1505-4228-BC64-CE1B00C234E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E3BE260-1505-4228-BC64-CE1B00C234E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E3BE260-1505-4228-BC64-CE1B00C234E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E3BE260-1505-4228-BC64-CE1B00C234E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

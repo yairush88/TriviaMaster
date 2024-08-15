@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TriviaMaster.Common\TriviaMaster.Common.csproj" />
+    <ProjectReference Include="..\TriviaMaster.ViewModels\TriviaMaster.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
