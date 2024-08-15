@@ -1,22 +1,50 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using TriviaMaster.Common;
 
 namespace TriviaMaster.Main
 {
     public partial class MainWindow : Window
     {
+        private readonly GameSettings _gameSettings;
+        private readonly IHost _host;
         private List<Question> _currentQuestions;
         private int _currentQuestionIndex;
         private int _correctAnswers;
         private string _selectedTopic;
+        private DispatcherTimer _timer;
+        private int _timeLeft;
 
-        public MainWindow()
+        public MainWindow(IOptions<GameSettings> gameSettings)
         {
             InitializeComponent();
+            _gameSettings = gameSettings.Value;
+
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            _timer.Tick += Timer_Tick;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (_timeLeft > 0)
+            {
+                _timeLeft--;
+                LblTimer.Text = $"זמן שנותר: {_timeLeft} שניות";
+            }
+            else
+            {
+                _timer.Stop();
+                EnableAnswerButtons(false);
+                HighlightCorrectAnswerWithTimeout();
+                NextQuestionWithDelay();
+            }
         }
 
         private void LoadQuestions(string topic)
@@ -25,6 +53,11 @@ namespace TriviaMaster.Main
             _currentQuestions = QuestionRepository.GetRandomQuestions(topic);
             _currentQuestionIndex = 0;
             _correctAnswers = 0;
+
+            if (_currentQuestions.Count > _gameSettings.NumberOfQuestions)
+            {
+                _currentQuestions = _currentQuestions.GetRange(0, _gameSettings.NumberOfQuestions);
+            }
 
             TopicSelectionPanel.Visibility = Visibility.Collapsed;
             QuestionPanel.Visibility = Visibility.Visible;
@@ -37,7 +70,12 @@ namespace TriviaMaster.Main
         {
             if (_currentQuestionIndex < _currentQuestions.Count)
             {
+                LblQuestionNumber.Visibility = Visibility.Visible;
+                LblTimer.Visibility = Visibility.Visible;
+
                 var question = _currentQuestions[_currentQuestionIndex];
+                LblQuestionNumber.Text = $"שאלה {_currentQuestionIndex + 1} מתוך {_currentQuestions.Count}";
+                LblTimer.Text = $"זמן שנותר: {_gameSettings.TimePerQuestion} שניות";
                 LblQuestion.Text = question.Text;
 
                 BtnAnswer1.Content = question.Answers[0];
@@ -47,6 +85,9 @@ namespace TriviaMaster.Main
 
                 ResetButtonColors();
                 EnableAnswerButtons(true);
+
+                _timeLeft = _gameSettings.TimePerQuestion;
+                _timer.Start();
             }
             else
             {
@@ -64,9 +105,11 @@ namespace TriviaMaster.Main
 
         private async void AnswerButton_Click(object sender, RoutedEventArgs e)
         {
+            _timer.Stop();
+            EnableAnswerButtons(false);
+
             var button = sender as Button;
             int selectedAnswerIndex = int.Parse(button.Tag.ToString());
-            EnableAnswerButtons(false);
 
             if (_currentQuestions[_currentQuestionIndex].IsCorrect(selectedAnswerIndex))
             {
@@ -80,7 +123,6 @@ namespace TriviaMaster.Main
             }
 
             await Task.Delay(2000);
-
             _currentQuestionIndex++;
             DisplayQuestion();
         }
@@ -88,22 +130,35 @@ namespace TriviaMaster.Main
         private void HighlightCorrectAnswer()
         {
             int correctIndex = _currentQuestions[_currentQuestionIndex].CorrectAnswerIndex;
+            Button correctButton = GetButtonByIndex(correctIndex);
+            correctButton.Background = new SolidColorBrush(Colors.Green);
+            EnableAnswerButtons(false);
+        }
 
-            switch (correctIndex)
+        private void HighlightCorrectAnswerWithTimeout()
+        {
+            int correctIndex = _currentQuestions[_currentQuestionIndex].CorrectAnswerIndex;
+            Button correctButton = GetButtonByIndex(correctIndex);
+            correctButton.Background = new SolidColorBrush(Colors.Orange); // Use orange for timeout correct answer
+        }
+
+        private Button GetButtonByIndex(int index)
+        {
+            return index switch
             {
-                case 0:
-                    BtnAnswer1.Background = new SolidColorBrush(Colors.Green);
-                    break;
-                case 1:
-                    BtnAnswer2.Background = new SolidColorBrush(Colors.Green);
-                    break;
-                case 2:
-                    BtnAnswer3.Background = new SolidColorBrush(Colors.Green);
-                    break;
-                case 3:
-                    BtnAnswer4.Background = new SolidColorBrush(Colors.Green);
-                    break;
-            }
+                0 => BtnAnswer1,
+                1 => BtnAnswer2,
+                2 => BtnAnswer3,
+                3 => BtnAnswer4,
+                _ => null,
+            };
+        }
+
+        private async void NextQuestionWithDelay()
+        {
+            await Task.Delay(2000);
+            _currentQuestionIndex++;
+            DisplayQuestion();
         }
 
         private void EnableAnswerButtons(bool isEnabled)
@@ -118,6 +173,9 @@ namespace TriviaMaster.Main
         {
             QuestionPanel.Visibility = Visibility.Collapsed;
             ResultPanel.Visibility = Visibility.Visible;
+
+            LblTimer.Visibility = Visibility.Collapsed;
+            LblQuestionNumber.Visibility = Visibility.Collapsed;
 
             LblResult.Text = $"סיום משחק! ענית נכון על {_correctAnswers} מתוך {_currentQuestions.Count} שאלות.";
         }
